@@ -8774,3 +8774,9 @@ node_modules/yocto-queue/index.js
 node_modules/yocto-queue/license
 node_modules/yocto-queue/package.json
 node_modules/yocto-queue/readme.md
+node_modules/minipass-sized/.gitignore
+node_modules/minipass-sized/index.js
+node_modules/minipass-sized/LICENSE
+node_modules/minipass-sized/package-lock.json
+node_modules/minipass-sized/package.json
+node_modules/minipass-sized/README.md
