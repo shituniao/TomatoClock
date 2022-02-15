@@ -1,13 +1,59 @@
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
-//设定时钟大小
+//设定窗口大小
 const { Winwidth, Winheight } = { Winwidth: 150, Winheight: 150 }
-const gotTheLock = app.requestSingleInstanceLock()
+
+//初始化时钟
+let tikID
+const { workTime, breakTime } = require('./src/preload')
+let mainContents = null
+let currentTime = workTime
+let sts = 'work';
+
+const secondToMMSS = (t) => {
+  let minute = parseInt(t / 60);
+  let second = parseInt(t % 60);
+  let MMSS = minute.toString().padStart(2, '0') + ':' + second.toString().padStart(2, '0');
+  return MMSS;
+}
+
+let script = 'document.querySelector("#timeNum").innerHTML ="' + secondToMMSS(currentTime) + '";'
+const tiktok = () => {
+  currentTime -= 1
+  script = 'document.querySelector("#timeNum").innerHTML ="' + secondToMMSS(currentTime) + '";'
+  mainContents.executeJavaScript(script).then((result) => {
+    console.log(result)
+  })
+  let alarm = ''
+  if (currentTime == 0) {
+    switch (sts) {
+      case 'work':
+        alarm = 'document.querySelector("#alarm").setAttribute("src", "2.mp3");'
+        currentTime = breakTime + 1;
+        sts = 'break';
+        break;
+      case 'break':
+        alarm = 'document.querySelector("#alarm").setAttribute("src", "1.mp3");'
+        currentTime = workTime + 1;
+        sts = 'work';
+        break;
+      default:
+    }
+    mainContents.executeJavaScript(alarm + 'document.querySelector("#alarm").play();');
+  }
+
+
+}
+
 
 //单一进程锁
+const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
   app.quit()
 }
+
+//安装时退出
+if (require('electron-squirrel-startup')) return app.quit();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -32,12 +78,15 @@ const createWindow = () => {
     alwaysOnTop: true,
     thickFrame: false,
     transparent: true,
-    focusable: true
+    focusable: false,
+    webPreferences: {
+      preload: path.join(__dirname, './src/preload.js')
+    }
   });
-  //mainWindow.on('ready-to-show', mainWindow.clock.clockReady());
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'src/clock.html'));
+  mainContents = mainWindow.webContents
 
   // 打开开发者工具
   //mainWindow.webContents.openDevTools();
@@ -46,13 +95,23 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  globalShortcut.register('Alt+Control+Esc', () => {
-    app.quit();
+app.whenReady().then(createWindow).then(() => {
+  mainContents.executeJavaScript(script).then((result) => {
+    console.log(result)
   })
-}).then(createWindow)
-
-
+  globalShortcut.register('Super+Esc', () => {
+    app.quit();
+  });
+  globalShortcut.register('Super+F2', () => {
+    tikID = setInterval(() => {
+      tiktok();
+    }, 1000);
+  });
+  globalShortcut.register('Super+F3', () => {
+    clearInterval(tikID);
+    mainContents.executeJavaScript('document.querySelector("#pause").play();')
+  })
+})
 
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -71,6 +130,10 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

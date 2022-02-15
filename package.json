@@ -1,7 +1,7 @@
 {
   "name": "tomatoclock",
   "productName": "tomatoclock",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Tomato Clock for Work",
   "main": "main.js",
   "scripts": {
@@ -11,20 +11,21 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
-  "keywords": [],
+  "keywords": ["tomatoclock"],
   "author": "ShiTuNiao",
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
-      "makers": [
+      "packagerConfig": {
+        "asar":true,
+        "overwrite":true,
+        "junk":true
+      },
+      "makers":[
         {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "tomatoclock"
-          }
-        }
-      ]
+        "name": "@electron-forge/maker-zip"
+      }
+    ]
     }
   },
   "dependencies": {
