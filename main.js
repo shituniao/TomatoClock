@@ -1,6 +1,13 @@
 const { app, BrowserWindow, globalShortcut } = require('electron');
 const path = require('path');
-const { Clockwidth, Clockheight } = { Clockwidth: 150, Clockheight: 150 }
+//设定时钟大小
+const { Winwidth, Winheight } = { Winwidth: 150, Winheight: 150 }
+const gotTheLock = app.requestSingleInstanceLock()
+
+//单一进程锁
+if (!gotTheLock) {
+  app.quit()
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -9,21 +16,25 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
+  //获取屏幕尺寸以决定窗口贴靠位置
   const { screen } = require('electron')
   const mainScreen = screen.getPrimaryDisplay();
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    x: mainScreen.workAreaSize.width - Clockwidth - 140,
+  mainWindow = new BrowserWindow({
+    x: mainScreen.workAreaSize.width - Winwidth - 140,
     y: 0,
     center: false,
-    width: Clockwidth,
-    height: Clockheight,
+    width: Winwidth,
+    height: Winheight,
     frame: false,
     resizable: false,
     movable: false,
     alwaysOnTop: true,
-    thickFrame: false
+    thickFrame: false,
+    transparent: true,
+    focusable: true
   });
+  //mainWindow.on('ready-to-show', mainWindow.clock.clockReady());
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'src/clock.html'));
@@ -39,7 +50,10 @@ app.whenReady().then(() => {
   globalShortcut.register('Alt+Control+Esc', () => {
     app.quit();
   })
-}).then(createWindow);
+}).then(createWindow)
+
+
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
