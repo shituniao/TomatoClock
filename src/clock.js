@@ -49,7 +49,7 @@ function Clock(wt, bt) {
                             break;
                         default:
                     }
-                    this.alarm.src = dir + sts + '.mp3'
+                    this.alarm.src = this.dir + this.sts + '.mp3'
                     this.alarm.play();
                 } else {
                     this.currentTime--
