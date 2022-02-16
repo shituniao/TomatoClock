@@ -5,7 +5,7 @@
 
 
 >### 已经打包了windows平台的压缩包，可以直接下载使用
->#### 下载链接：[番茄钟v0.1.0](https://github.com/shituniao/TomatoClock/releases/download/v0.8.0/tomatoclock-win32-x64-0.8.0.zip)
+>#### 下载链接：[番茄钟](https://github.com/shituniao/TomatoClock/releases/download/v0.8.0/tomatoclock-win32-x64-0.8.0.zip)
 >- 默认工作时间25分钟，休息5分钟，可修改resources目录下的setting.json文件
 >- Win+Esc：退出程序
 >- win+F2:暂停/继续
