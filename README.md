@@ -5,17 +5,20 @@
 
 
 >### 已经打包了windows平台的压缩包，可以直接下载使用
->#### 下载链接：[番茄钟v0.1.0](https://github.com/shituniao/TomatoClock/releases/download/clocktomato/tomatoclock-win32-x64-0.1.0.zip)
->- 默认工作时间25分钟，休息5分钟
+>#### 下载链接：[番茄钟v0.1.0](https://github.com/shituniao/TomatoClock/releases/download/v0.8.0/tomatoclock-win32-x64-0.8.0.zip)
+>- 默认工作时间25分钟，休息5分钟，可修改resources目录下的setting.json文件
 >- Win+Esc：退出程序
->- win+F2:开始计时器
->- win+F3：暂停/继续
+>- win+F2:暂停/继续
+>- win+F3：切换状态
 
 
 ## 日志
+- **2022-2-17** clock功能模块化打包，增加自定义setting功能
+- **2022-2-16** clock功能重构至render模块，通过content.send实现，引入Vue，加入状态标题和json配置文件
 - **2022-2-15** 完成基本计时功能<br>
 - **2022-2-14** 搭建基本页面框架和静态计时器测试<br>
 - **2022-2-13** 项目初始化<br> 
+
 ## 需要
 
 - LTS版本NodeJS

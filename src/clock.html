@@ -5,14 +5,20 @@
   <meta charset="UTF-8" />
   <title>Hello World!</title>
   <link rel="stylesheet" href="clock.css" />
+  <script src="vueglobalprd.js"></script>
 </head>
 
 <body>
   <div id="root">
-    <div id="timeNum"></div>
+    <div v-bind:id="'status-'+sts">
+      <div id="sts-item" style="background-color:red">工作</div>
+      <div id="sts-item" style="background-color: green;">休息</div>
+    </div>
+    <div v-bind:id="pause ? 'timeNum-pause' : 'timeNum'">
+      {{ct}}
+    </div>
   </div>
-  <audio preload="auto" id="alarm" style="visibility: hidden;"></audio>
-  <audio preload="auto" id="pause" style="visibility: hidden;" src="3.mp3"></audio>
+
   <script src="clock.js" type="module"></script>
 </body>
 

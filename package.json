@@ -1,7 +1,7 @@
 {
   "name": "tomatoclock",
   "productName": "tomatoclock",
-  "version": "0.1.0",
+  "version": "0.8.0",
   "description": "Tomato Clock for Work",
   "main": "main.js",
   "scripts": {
@@ -17,6 +17,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
+        "extraResource":["./src/work.mp3","./src/break.mp3","./src/pause.mp3","./src/setting.json"],
         "asar":true,
         "overwrite":true,
         "junk":true
