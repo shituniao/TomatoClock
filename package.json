@@ -1,7 +1,7 @@
 {
   "name": "tomatoclock",
   "productName": "tomatoclock",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "description": "Tomato Clock for Work",
   "main": "main.js",
   "scripts": {
@@ -20,7 +20,8 @@
         "extraResource":["./src/work.mp3","./src/break.mp3","./src/pause.mp3","./src/setting.json"],
         "asar":true,
         "overwrite":true,
-        "junk":true
+        "junk":true,
+        "icon":"./src/icon.ico"
       },
       "makers":[
         {

@@ -1,7 +1,7 @@
 const { app, BrowserWindow, globalShortcut, ipcMain, process } = require('electron');
 const path = require('path');
 //设定窗口大小
-const { Winwidth, Winheight } = { Winwidth: 200, Winheight: 40 }
+const { Winwidth, Winheight } = { Winwidth: 210, Winheight: 40 }
 let mainContents = null
 
 //单一进程锁

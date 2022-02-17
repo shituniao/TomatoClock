@@ -10,13 +10,18 @@
 
 <body>
   <div id="root">
-    <div v-bind:id="'status-'+sts">
-      <div id="sts-item" style="background-color:red">工作</div>
-      <div id="sts-item" style="background-color: green;">休息</div>
+    <div class="content" :class="pause ? 'stop' : 'play'">
+      <div class="timeNum">
+        {{ct}}
+      </div>
+      <div class="status" v-bind:class="sts" :class="pause ? 's-stop' : 's-play'">
+        <div class="sts-item" :style="pause ? {backgroundColor: 'white',
+        color: 'black'} : {backgroundColor:'green'}">{{pause ? '暂停' : '休息中'}}</div>
+        <div class="sts-item" :style="pause ? {backgroundColor: 'white',
+          color: 'black'} : {backgroundColor:'orangered'}">{{pause ? '暂停' : '工作中'}}</div>
+      </div>
     </div>
-    <div v-bind:id="pause ? 'timeNum-pause' : 'timeNum'">
-      {{ct}}
-    </div>
+
   </div>
 
   <script src="clock.js" type="module"></script>
