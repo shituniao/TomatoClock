@@ -38,4 +38,4 @@ clone项目到本地后，在根目录运行命令<br>
 
 ## 打包
 
-`yarn build`
+`yarn make`
