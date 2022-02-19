@@ -1,36 +1,37 @@
-const { ipcRenderer, process } = require('electron');
-const path = require('path')
-let tomato
-ipcRenderer.on('tik', (evt, arg) => {
-    console.log(arg);
-    tomato.tiktok(false);
+import { window, globalShortcut, process } from '@tauri-apps/api'
+import { createApp } from 'vue'
+import data from '/src/setting.json'
+import breakUrl from '/src/break.mp3'
+import workUrl from '/src/work.mp3'
+import pauseUrl from '/src/pause.mp3'
+
+
+const screen = await window.primaryMonitor();
+const windowSize = await window.appWindow.innerSize();
+const windowPos = new window.LogicalPosition(screen.size.width - windowSize.width + 16 - 140, 0)
+window.appWindow.setPosition(windowPos)
+
+
+globalShortcut.register('Super+Esc', () => {
+    process.exit();
 })
-ipcRenderer.on('change', (evt, arg) => {
-    console.log(arg);
+
+globalShortcut.register('Super+F2', () => {
+    tomato.tiktok();
+})
+
+globalShortcut.register('Super+F3', () => {
     tomato.change();
 })
-ipcRenderer.invoke('ispack').then((ispack) => {
-    let dir = './'
-    tomato = new Clock(1, 1)
-    if (ispack) {
-        dir = path.join(window.process.resourcesPath, dir)
-    } else {
-        dir = './'
-    }
-    tomato.loadTime(dir)
-    console.log(tomato)
-    vm.ct = secondToMMSS(tomato.currentTime)
-    vm.sts = tomato.sts
-    vm.pause = tomato.pause
-})
+
 function Clock(wt, bt) {
-    this.dir = ''
+    this.dir = './src/'
     this.currentTime = wt * 60;
     this.sts = 'work';
     this.pause = true;
     this.tikID
-    this.alarm = new Audio(this.dir + this.sts + '.mp3')
-    this.ppp = new Audio(this.dir + 'pause.mp3')
+    this.alarm = new Audio()
+    this.ppp = new Audio(pauseUrl)
     this.tiktok = (change) => {
         if (!change) {
             this.ppp.play();
@@ -42,14 +43,16 @@ function Clock(wt, bt) {
                         case 'work':
                             this.currentTime = bt * 60;
                             this.sts = 'break';
+                            this.alarm.src = breakUrl;
                             break;
                         case 'break':
                             this.currentTime = wt * 60;
                             this.sts = 'work';
+                            this.alarm.src = workUrl;
                             break;
                         default:
                     }
-                    this.alarm.src = this.dir + this.sts + '.mp3'
+
                     this.alarm.play();
                 } else {
                     this.currentTime--
@@ -68,14 +71,15 @@ function Clock(wt, bt) {
             case 'work':
                 this.currentTime = bt * 60;
                 this.sts = 'break';
+                this.alarm.src = breakUrl;
                 break;
             case 'break':
                 this.currentTime = wt * 60;
                 this.sts = 'work';
+                this.alarm.src = workUrl;
                 break;
             default:
         }
-        this.alarm.src = this.dir + this.sts + '.mp3'
         this.alarm.play();
         vm.ct = secondToMMSS(this.currentTime)
         vm.sts = this.sts
@@ -85,9 +89,8 @@ function Clock(wt, bt) {
     }
     this.loadTime = (dir) => {
         this.dir = dir
-        const { workTime, breakTime } = require(dir + 'setting.json')
-        wt = workTime;
-        bt = breakTime;
+        wt = data.workTime;
+        bt = data.breakTime;
         this.currentTime = wt * 60
     }
 }
@@ -100,7 +103,7 @@ const secondToMMSS = (t) => {
 }
 
 //Vue模块
-const app = Vue.createApp({
+const app = createApp({
     data() {
         return {
             ct: 0,
@@ -111,4 +114,9 @@ const app = Vue.createApp({
 })
 const vm = app.mount('#root')
 
-
+const tomato = new Clock(1, 1)
+tomato.loadTime('/src/')
+console.log(tomato)
+vm.ct = secondToMMSS(tomato.currentTime)
+vm.sts = tomato.sts
+vm.pause = tomato.pause

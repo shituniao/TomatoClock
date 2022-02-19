@@ -1,0 +1,65 @@
+{
+  "package": {
+    "productName": "tuari_tomatoclock",
+    "version": "0.1.0"
+  },
+  "build": {
+    "distDir": "../dist",
+    "devPath": "http://localhost:3000",
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn build"
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.tauri.dev",
+      "icon": [
+        "icons/icon.ico"
+      ],
+      "resources": [],
+      "externalBin": [],
+      "copyright": "",
+      "category": "DeveloperTool",
+      "shortDescription": "",
+      "longDescription": "",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "updater": {
+      "active": false
+    },
+    "allowlist": {
+      "window":{
+        "all":true
+      },
+      "globalShortcut":{
+        "all":true
+      },
+      "process":{
+        "all":true
+      }
+    },
+    "windows": [
+      {
+        "title": "tomatoclock",
+        "width": 210,
+        "height": 40,
+        "x":0,
+        "y":0,
+        "resizable": false,
+        "fullscreen": false,
+        "alwaysOnTop":true,
+        "decorations":false,
+        "skipTaskbar":true,
+        "transparent":true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
+}
