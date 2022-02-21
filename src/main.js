@@ -25,14 +25,18 @@ globalShortcut.register('Super+F3', () => {
 })
 
 function Clock(wt, bt) {
-    this.dir = './src/'
+    this.dir = ''
     this.currentTime = wt * 60;
+    this.loadbar = 100;
     this.sts = 'work';
+    this.notice = false;
+    let noticeID;
     this.pause = true;
     this.tikID
-    this.alarm = new Audio()
+    this.alarm = new Audio(workUrl)
     this.ppp = new Audio(pauseUrl)
     this.tiktok = (change) => {
+        this.notition();
         if (!change) {
             this.ppp.play();
         }
@@ -52,10 +56,22 @@ function Clock(wt, bt) {
                             break;
                         default:
                     }
-
                     this.alarm.play();
+                    this.notition();
                 } else {
                     this.currentTime--
+                }
+                switch (this.sts) {
+                    case 'work':
+                        this.loadbar = Math.floor(this.currentTime / (wt * 60) * 100)
+                        break;
+                    case 'break':
+                        this.loadbar = Math.floor(this.currentTime / (bt * 60) * 100)
+                        break;
+                    default:
+                }
+                if (!this.notice) {
+                    vm.loadbar = this.loadbar;
                 }
                 vm.ct = secondToMMSS(this.currentTime)
                 vm.sts = this.sts
@@ -67,16 +83,17 @@ function Clock(wt, bt) {
         vm.pause = this.pause;
     }
     this.change = () => {
+        this.notition();
         switch (this.sts) {
             case 'work':
                 this.currentTime = bt * 60;
                 this.sts = 'break';
-                this.alarm.src = breakUrl;
+                this.alarm.src = breakUrl
                 break;
             case 'break':
                 this.currentTime = wt * 60;
                 this.sts = 'work';
-                this.alarm.src = workUrl;
+                this.alarm.src = workUrl
                 break;
             default:
         }
@@ -93,6 +110,34 @@ function Clock(wt, bt) {
         bt = data.breakTime;
         this.currentTime = wt * 60
     }
+    this.notition = () => {
+        if (!this.notice) {
+            this.notice = true;
+            vm.notice = this.notice;
+            vm.loadbar = 50;
+            noticeID = setTimeout(() => {
+                this.notice = false;
+                vm.notice = this.notice;
+                if (!this.pause) {
+                    vm.loadbar = this.loadbar;
+                } else {
+                    vm.loadbar = 100
+                }
+            }, 2000)
+        } else {
+            clearTimeout(noticeID);
+            noticeID = setTimeout(() => {
+                this.notice = false;
+                vm.notice = this.notice;
+                if (!this.pause) {
+                    vm.loadbar = this.loadbar;
+                } else {
+                    vm.loadbar = 100
+                }
+            }, 2000)
+        }
+
+    }
 }
 //时间格式转换
 const secondToMMSS = (t) => {
@@ -108,7 +153,9 @@ const app = createApp({
         return {
             ct: 0,
             sts: 'work',
-            pause: true
+            pause: true,
+            notice: true,
+            loadbar: 100
         }
     }
 })
