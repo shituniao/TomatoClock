@@ -1,7 +1,7 @@
 {
   "name": "tomatoclock",
   "productName": "tomatoclock",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Tomato Clock for Work",
   "main": "main.js",
   "scripts": {

@@ -10,11 +10,11 @@
 
 <body>
   <div id="root">
-    <div class="content" :class="pause ? 'stop' : 'play'">
+    <div class="content" :class="notice ? 'notice' : 'normal'">
       <div class="timeNum">
         {{ct}}
       </div>
-      <div class="status" v-bind:class="sts" :class="pause ? 's-stop' : 's-play'">
+      <div class="status" v-bind:class="sts" :style="{width:loadbar+'%'}">
         <div class="sts-item" :style="pause ? {backgroundColor: 'white',
         color: 'black'} : {backgroundColor:'green'}">{{pause ? '暂停' : '休息中'}}</div>
         <div class="sts-item" :style="pause ? {backgroundColor: 'white',
